@@ -1,0 +1,47 @@
+const fs = require('fs');
+const readline = require('readline');
+const {google} = require('googleapis');
+const credentials = require('./credentials2.json');
+
+const gmail = google.gmail('v1');
+
+async function main() {
+    const auth = new google.auth.GoogleAuth({
+        // Scopes can be specified either as an array or as a single, space-delimited string.
+        scopes: [
+          'https://mail.google.com/',
+          'https://www.googleapis.com/auth/gmail.compose',
+          'https://www.googleapis.com/auth/gmail.metadata',
+          'https://www.googleapis.com/auth/gmail.modify',
+          'https://www.googleapis.com/auth/gmail.readonly',
+        ],
+        credentials: {
+            client_id: credentials.client_id
+            client_secret: credentials.
+        }
+      });
+    
+      // Acquire an auth client, and bind it to all future calls
+      const authClient = await auth.getClient();
+      google.options({auth: authClient});
+    
+      // Do the magic
+      const res = await gmail.users.getProfile({
+        // The user's email address. The special value `me` can be used to indicate the authenticated user.
+        userId: 'victor.vic.mazeli@gmail.com',
+      });
+      console.log(res.data);
+    
+      // Example response
+      // {
+      //   "emailAddress": "my_emailAddress",
+      //   "historyId": "my_historyId",
+      //   "messagesTotal": 0,
+      //   "threadsTotal": 0
+      // }
+
+}
+main().catch((err) => {
+    console.log(err);
+});
+
